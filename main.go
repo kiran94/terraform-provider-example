@@ -1,14 +1,15 @@
 package main
 
 import (
+	"log"
+
 	"github.com/hashicorp/terraform-plugin-sdk/v2/plugin"
+	"github.com/kiran94/terraform-provider-example/client"
 	"github.com/kiran94/terraform-provider-example/example"
-	// "log"
-	// "github.com/kiran94/terraform-provider-example/client"
 )
 
 func main() {
-    // testClient()
+	// testClient()
 
 	plugin.Serve(&plugin.ServeOpts{
 		ProviderFunc: example.Provider,
@@ -25,13 +26,13 @@ func testClient() {
 		"rating": "100",
 	}
 
-	Add Item
+	// Add Item
 	err := apiClient.PostItem(show)
 	if err != nil {
 		panic(err)
 	}
 
-	Get Item
+	// Get Item
 	result, err := apiClient.GetItem(show["id"])
 	if err != nil {
 		panic(err)
@@ -43,7 +44,7 @@ func testClient() {
 		log.Println("No Result found")
 	}
 
-	Delete Item
+	// Delete Item
 	err2 := apiClient.DeleteItem(show["id"])
 	if err2 != nil {
 		panic(err2)
