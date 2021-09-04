@@ -13,6 +13,9 @@ dev:
 build:
 	go build
 
+test:
+	go test
+
 clean:
 	rm ./sample/.terraform.lock.hcl
 	rm ./sample/terraform.tfstate
