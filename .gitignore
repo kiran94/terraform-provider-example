@@ -67,5 +67,6 @@ terraform.rc
 
 # Default output executable for go build
 terraform-provider-example
+main
 
 ./sample/.terraform.lock.hcl
