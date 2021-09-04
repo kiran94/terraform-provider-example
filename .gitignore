@@ -64,3 +64,6 @@ override.tf.json
 terraform.rc
 
 # End of https://www.toptal.com/developers/gitignore/api/terraform
+
+# Default output executable for go build
+terraform-provider-example
