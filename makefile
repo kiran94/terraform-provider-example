@@ -9,3 +9,7 @@ INSTALL_PATH=~/.local/share/terraform/plugins/localhost/providers/$(PROVIDER_NAM
 dev:
 	mkdir -p $(INSTALL_PATH)
 	go build -o $(INSTALL_PATH)/terraform-provider-$(PROVIDER_NAME) main.go
+
+clean:
+	rm ./sample/.terraform.lock.hcl
+	rm ./sample/terraform.tfstate
