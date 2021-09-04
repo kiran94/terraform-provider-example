@@ -80,6 +80,7 @@ func resourceReadItem(d *schema.ResourceData, m interface{}) error {
 	}
 
 	if len(item) == 0 {
+		log.Println("No items were found.")
 		return nil
 	}
 
