@@ -8,24 +8,30 @@ import (
 	"github.com/kiran94/terraform-provider-example/client"
 )
 
+const (
+	unique_id_key = "unique_id"
+	name_key      = "name"
+	rating_key    = "rating"
+)
+
 func resourceTvShow() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"unique_id": {
+			unique_id_key: {
 				Type:        schema.TypeString,
 				Required:    true,
 				Description: "The unique identifier for the show",
 				ForceNew:    true,
 				// ValidateFunc: validateName,
 			},
-			"name": {
+			name_key: {
 				Type:        schema.TypeString,
 				Required:    true,
 				Description: "The name of the show",
 				ForceNew:    false,
 				// ValidateFunc: validateName,
 			},
-			"rating": {
+			rating_key: {
 				Type:        schema.TypeString,
 				Required:    true,
 				Description: "The rating of the show",
@@ -48,9 +54,9 @@ func resourceCreateItem(d *schema.ResourceData, m interface{}) error {
 	apiClient := m.(*client.ApiClient)
 
 	show := map[string]string{
-		"id":     d.Get("unique_id").(string),
-		"name":   d.Get("name").(string),
-		"rating": d.Get("rating").(string),
+		"id":     d.Get(unique_id_key).(string),
+		"name":   d.Get(name_key).(string),
+		"rating": d.Get(rating_key).(string),
 	}
 
 	log.Printf("Creating Resource %s", show["id"])
@@ -59,19 +65,18 @@ func resourceCreateItem(d *schema.ResourceData, m interface{}) error {
 		return err
 	}
 
-	d.SetId(d.Get("unique_id").(string))
-	d.Set("name", show["name"])
-	d.Set("rating", show["rating"])
-	// d.Set("rating", strconv.FormatFloat(show["rating"].(float64), 'f', 6, 64))
+	d.SetId(d.Get(unique_id_key).(string))
+	d.Set(name_key, show["name"])
+	d.Set(rating_key, show["rating"])
 
-	log.Printf("Created Item %s", d.Get("unique_id").(string))
+	log.Printf("Created Item %s", d.Get(unique_id_key).(string))
 	return nil
 }
 
 func resourceReadItem(d *schema.ResourceData, m interface{}) error {
 	apiClient := m.(*client.ApiClient)
 
-	itemId := d.Get("unique_id").(string)
+	itemId := d.Get(unique_id_key).(string)
 	log.Printf("Reading Item %s", itemId)
 	item, err := apiClient.GetItem(itemId)
 
@@ -85,8 +90,8 @@ func resourceReadItem(d *schema.ResourceData, m interface{}) error {
 	}
 
 	d.SetId(strconv.FormatFloat(item["id"].(float64), 'f', 0, 64))
-	d.Set("rating", strconv.FormatFloat(item["rating"].(float64), 'f', 0, 64))
-	d.Set("name", item["name"].(string))
+	d.Set(rating_key, strconv.FormatFloat(item["rating"].(float64), 'f', 0, 64))
+	d.Set(name_key, item["name"].(string))
 	return nil
 }
 
