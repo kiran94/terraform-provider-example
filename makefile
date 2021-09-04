@@ -10,6 +10,12 @@ dev:
 	mkdir -p $(INSTALL_PATH)
 	go build -o $(INSTALL_PATH)/terraform-provider-$(PROVIDER_NAME) main.go
 
+build:
+	go build
+
+test:
+	go test
+
 clean:
 	rm ./sample/.terraform.lock.hcl
 	rm ./sample/terraform.tfstate
