@@ -20,10 +20,10 @@ func testClient() {
 	apiClient := new(client.ApiClient)
 	apiClient.Init("https://localhost:5001")
 
-	show := map[string]string{
-		"id":     "12",
+	show := map[string]interface{}{
+		"id":     12,
 		"name":   "Toy Story 12",
-		"rating": "100",
+		"rating": 100,
 	}
 
 	// Add Item
@@ -33,7 +33,7 @@ func testClient() {
 	}
 
 	// Get Item
-	result, err := apiClient.GetItem(show["id"])
+	result, err := apiClient.GetItem(show["id"].(int))
 	if err != nil {
 		panic(err)
 	} else {
@@ -45,7 +45,7 @@ func testClient() {
 	}
 
 	// Delete Item
-	err2 := apiClient.DeleteItem(show["id"])
+	err2 := apiClient.DeleteItem(show["id"].(int))
 	if err2 != nil {
 		panic(err2)
 	}

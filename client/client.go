@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"strconv"
 )
 
 type ApiClient struct {
@@ -15,8 +16,8 @@ func (client *ApiClient) Init(baseUrl string) {
 	client.BaseUrl = baseUrl
 }
 
-func (client *ApiClient) GetItem(id string) (map[string]interface{}, error) {
-	url := client.BaseUrl + "?id=" + id
+func (client *ApiClient) GetItem(id int) (map[string]interface{}, error) {
+	url := client.BaseUrl + "?id=" + strconv.Itoa(id)
 
 	log.Printf("Getting Item %s", url)
 
@@ -33,7 +34,7 @@ func (client *ApiClient) GetItem(id string) (map[string]interface{}, error) {
 	return result, nil
 }
 
-func (client *ApiClient) PostItem(show map[string]string) error {
+func (client *ApiClient) PostItem(show map[string]interface{}) error {
 	url := client.BaseUrl
 	log.Printf("Creating Item %s (%s)", url, show)
 
@@ -51,9 +52,9 @@ func (client *ApiClient) PostItem(show map[string]string) error {
 	return nil
 }
 
-func (client *ApiClient) DeleteItem(id string) error {
+func (client *ApiClient) DeleteItem(id int) error {
 
-	url := client.BaseUrl + "?id=" + id
+	url := client.BaseUrl + "?id=" + strconv.Itoa(id)
 	log.Printf("Deleting Item %s", url)
 
 	req, err := http.NewRequest(http.MethodDelete, url, nil)

@@ -18,7 +18,7 @@ func resourceTvShow() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			unique_id_key: {
-				Type:        schema.TypeString,
+				Type:        schema.TypeInt,
 				Required:    true,
 				Description: "The unique identifier for the show",
 				ForceNew:    true,
@@ -32,7 +32,7 @@ func resourceTvShow() *schema.Resource {
 				// ValidateFunc: validateName,
 			},
 			rating_key: {
-				Type:        schema.TypeString,
+				Type:        schema.TypeInt,
 				Required:    true,
 				Description: "The rating of the show",
 				ForceNew:    false,
@@ -53,10 +53,10 @@ func resourceTvShow() *schema.Resource {
 func resourceCreateItem(d *schema.ResourceData, m interface{}) error {
 	apiClient := m.(*client.ApiClient)
 
-	show := map[string]string{
-		"id":     d.Get(unique_id_key).(string),
+	show := map[string]interface{}{
+		"id":     d.Get(unique_id_key).(int),
 		"name":   d.Get(name_key).(string),
-		"rating": d.Get(rating_key).(string),
+		"rating": d.Get(rating_key).(int),
 	}
 
 	log.Printf("Creating Resource %s", show["id"])
@@ -65,19 +65,19 @@ func resourceCreateItem(d *schema.ResourceData, m interface{}) error {
 		return err
 	}
 
-	d.SetId(d.Get(unique_id_key).(string))
+	d.SetId(strconv.Itoa(d.Get(unique_id_key).(int)))
 	d.Set(name_key, show["name"])
 	d.Set(rating_key, show["rating"])
 
-	log.Printf("Created Item %s", d.Get(unique_id_key).(string))
+	log.Printf("Created Item %d", d.Get(unique_id_key).(int))
 	return nil
 }
 
 func resourceReadItem(d *schema.ResourceData, m interface{}) error {
 	apiClient := m.(*client.ApiClient)
 
-	itemId := d.Get(unique_id_key).(string)
-	log.Printf("Reading Item %s", itemId)
+	itemId := d.Get(unique_id_key).(int)
+	log.Printf("Reading Item %d", itemId)
 	item, err := apiClient.GetItem(itemId)
 
 	if err != nil {
@@ -89,8 +89,8 @@ func resourceReadItem(d *schema.ResourceData, m interface{}) error {
 		return nil
 	}
 
-	d.SetId(strconv.FormatFloat(item["id"].(float64), 'f', 0, 64))
-	d.Set(rating_key, strconv.FormatFloat(item["rating"].(float64), 'f', 0, 64))
+	d.SetId(strconv.Itoa(int(item["id"].(float64))))
+	d.Set(rating_key, strconv.Itoa(int(item["rating"].(float64))))
 	d.Set(name_key, item["name"].(string))
 	return nil
 }
@@ -106,7 +106,12 @@ func resourceDeleteItem(d *schema.ResourceData, m interface{}) error {
 	itemId := d.Id()
 	log.Printf("Deleting Item %s", itemId)
 
-	err := apiClient.DeleteItem(itemId)
+	intId, err2 := strconv.Atoi(itemId)
+	if err2 != nil {
+		return err2
+	}
+
+	err := apiClient.DeleteItem(intId)
 	if err != nil {
 		return err
 	}
@@ -120,7 +125,12 @@ func resourceExistsItem(d *schema.ResourceData, m interface{}) (bool, error) {
 
 	apiClient := m.(*client.ApiClient)
 
-	item, err := apiClient.GetItem(itemId)
+	intItemId, err := strconv.Atoi(itemId)
+	if err != nil {
+		return false, err
+	}
+
+	item, err := apiClient.GetItem(intItemId)
 	if err != nil {
 		return false, err
 	}

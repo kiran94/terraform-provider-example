@@ -12,7 +12,7 @@ provider "example" {
 }
 
 resource "example_tv_show" "item" {
-  unique_id = "47"
-  name = "TMNT3"
-  rating = "600"
+  unique_id = 49
+  name = "TMNT100"
+  rating = 5
 }
