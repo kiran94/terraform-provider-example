@@ -14,5 +14,5 @@ provider "example" {
 resource "example_tv_show" "item" {
   unique_id = 49
   name = "TMNT100"
-  rating = 5
+  rating = 2
 }

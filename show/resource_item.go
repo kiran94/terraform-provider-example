@@ -1,6 +1,7 @@
 package show
 
 import (
+	"fmt"
 	"log"
 	"strconv"
 
@@ -22,21 +23,26 @@ func resourceTvShow() *schema.Resource {
 				Required:    true,
 				Description: "The unique identifier for the show",
 				ForceNew:    true,
-				// ValidateFunc: validateName,
 			},
 			name_key: {
 				Type:        schema.TypeString,
 				Required:    true,
 				Description: "The name of the show",
 				ForceNew:    false,
-				// ValidateFunc: validateName,
 			},
 			rating_key: {
 				Type:        schema.TypeInt,
 				Required:    true,
 				Description: "The rating of the show",
 				ForceNew:    false,
-				// ValidateFunc: validateName,
+				ValidateFunc: func(val interface{}, key string) (warns []string, errs []error) {
+					v := val.(int)
+					if v < 1 || v > 10 {
+						errs = append(errs, fmt.Errorf("%q must be between 1 and 10 inclusive, got: %d", key, v))
+					}
+
+					return
+				},
 			},
 		},
 		Create: resourceCreateItem,
