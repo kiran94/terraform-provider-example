@@ -5,14 +5,14 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/plugin"
 	"github.com/kiran94/terraform-provider-example/client"
-	"github.com/kiran94/terraform-provider-example/example"
+	"github.com/kiran94/terraform-provider-example/show"
 )
 
 func main() {
 	// testClient()
 
 	plugin.Serve(&plugin.ServeOpts{
-		ProviderFunc: example.Provider,
+		ProviderFunc: show.Provider,
 	})
 }
 

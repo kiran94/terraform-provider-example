@@ -1,4 +1,4 @@
-package example
+package show
 
 import (
 	"log"
@@ -8,13 +8,13 @@ import (
 	"github.com/kiran94/terraform-provider-example/client"
 )
 
-func resourceItem() *schema.Resource {
+func resourceTvShow() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"unique_id": {
 				Type:        schema.TypeString,
 				Required:    true,
-				Description: "The name of the resource, also acts as it's unique ID",
+				Description: "The unique identifier for the show",
 				ForceNew:    true,
 				// ValidateFunc: validateName,
 			},

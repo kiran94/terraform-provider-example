@@ -11,8 +11,8 @@ provider "example" {
 
 }
 
-resource "example_item" "item" {
-  unique_id = "46"
-  name = "TMNT"
-  rating = "500"
+resource "example_tv_show" "item" {
+  unique_id = "47"
+  name = "TMNT3"
+  rating = "600"
 }

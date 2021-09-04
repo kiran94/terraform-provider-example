@@ -1,4 +1,4 @@
-package example
+package show
 
 import (
     "github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -15,7 +15,7 @@ func Provider() *schema.Provider {
 			},
 		},
 		ResourcesMap: map[string]*schema.Resource{
-			"example_item": resourceItem(),
+			"example_tv_show": resourceTvShow(),
 		},
 		ConfigureFunc: providerConfigure,
 	}
