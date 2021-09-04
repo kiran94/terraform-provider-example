@@ -15,5 +15,12 @@ jobs:
       - uses: actions/setup-go@v2
         with:
           go-version: ${{ matrix.go-version }}
-      - run: |
+
+      - name: Build
+        run: |
           make build
+
+      - name: Lint
+        uses: Jerome1337/golint-action@v1.0.2
+        with:
+          golint-path: "."
