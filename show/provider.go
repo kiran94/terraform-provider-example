@@ -1,7 +1,7 @@
 package show
 
 import (
-    "github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/kiran94/terraform-provider-example/client"
 )
 
@@ -23,7 +23,6 @@ func Provider() *schema.Provider {
 
 func providerConfigure(d *schema.ResourceData) (interface{}, error) {
 	host := d.Get("host").(string)
-	apiClient := new(client.ApiClient)
-	apiClient.Init(host)
-	return apiClient, nil
+	apiClient := client.ApiClient{BaseUrl: host}
+	return &apiClient, nil
 }

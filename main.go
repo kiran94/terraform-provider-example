@@ -17,8 +17,9 @@ func main() {
 }
 
 func testClient() {
-	apiClient := new(client.ApiClient)
-	apiClient.Init("https://localhost:5001")
+	apiClient := client.ApiClient{
+		BaseUrl: "https://localhost:5001",
+	}
 
 	show := map[string]interface{}{
 		"id":     12,

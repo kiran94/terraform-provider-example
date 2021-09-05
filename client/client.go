@@ -12,10 +12,6 @@ type ApiClient struct {
 	BaseUrl string
 }
 
-func (client *ApiClient) Init(baseUrl string) {
-	client.BaseUrl = baseUrl
-}
-
 func (client *ApiClient) GetItem(id int) (map[string]interface{}, error) {
 	url := client.BaseUrl + "?id=" + strconv.Itoa(id)
 
