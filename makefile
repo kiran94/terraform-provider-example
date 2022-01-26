@@ -19,3 +19,6 @@ test:
 clean:
 	rm ./sample/.terraform.lock.hcl
 	rm ./sample/terraform.tfstate
+
+example_server:
+	go run ./cmd/server/main.go
