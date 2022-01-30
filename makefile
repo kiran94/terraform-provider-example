@@ -12,10 +12,10 @@ dev:
 	go build -o $(INSTALL_PATH)/terraform-provider-$(PROVIDER_NAME) main.go
 
 build:
-	go build
+	go build -race ./...
 
 test:
-	go test
+	go test ./...
 
 clean:
 	rm ./sample/.terraform.lock.hcl

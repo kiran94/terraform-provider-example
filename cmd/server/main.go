@@ -80,8 +80,7 @@ func main() {
 		newTodo.Id = incrementDatabaseId()
 		todoDatabase[newTodo.Id] = newTodo
 
-		logrus.Info("Creating new todo %v+", newTodo)
-
+		logrus.WithField("id", newTodo.Id).Debug("Created new todo")
 		c.JSON(http.StatusAccepted, newTodo)
 	})
 
