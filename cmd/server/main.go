@@ -34,6 +34,13 @@ var (
 	databaseIncrement      = 5
 )
 
+/*
+Starts a new Example Todo Planner Server which is
+used as the underlying API for the Terraform Provider.
+
+This is a just a simple todo application which
+provides CRUD functionality.
+*/
 func main() {
 	r := getGinEngine()
 
@@ -149,6 +156,7 @@ func main() {
 	r.Run(port)
 }
 
+// Sends a bad request with the given message
 func sendBadRequest(c *gin.Context, status int, message string, err error) {
 	logrus.WithFields(logrus.Fields{
 		"status":  status,
@@ -175,7 +183,8 @@ func getGinEngine() *gin.Engine {
 	return r
 }
 
-// Atotmically increment the database id
+// Atomically increment the database id across the server
+// not multi-container safe
 func incrementDatabaseId() int {
 	databaseIncrementMutex.Lock()
 	databaseIncrement += 1
