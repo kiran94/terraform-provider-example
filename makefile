@@ -1,10 +1,11 @@
-
 PROVIDER_NAME=example
-PROVIDER_VERSION=0.0.2
+PROVIDER_VERSION=1.0.0
+PROVIDER_HOST=terraform-example.com
+PROVIDER_NAMESPACE=exampleprovider
 OS=$(shell go env GOOS)
 ARCH=$(shell go env GOARCH)
 
-INSTALL_PATH=~/.local/share/terraform/plugins/localhost/providers/$(PROVIDER_NAME)/$(PROVIDER_VERSION)/$(OS)_$(ARCH)
+INSTALL_PATH=~/.terraform.d/plugins/$(PROVIDER_HOST)/$(PROVIDER_NAMESPACE)/$(PROVIDER_NAME)/$(PROVIDER_VERSION)/$(OS)_$(ARCH)/
 
 dev:
 	mkdir -p $(INSTALL_PATH)
