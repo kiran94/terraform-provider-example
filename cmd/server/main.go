@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strconv"
+	"sync"
 
 	"github.com/kiran94/terraform-provider-example/pkg"
 	ginlogrus "github.com/toorop/gin-logrus"
@@ -28,10 +29,12 @@ var (
 		4: {Id: 4, Title: "My Todo", Message: "My Message of the Todo", Priority: 9},
 		5: {Id: 5, Title: "My Todo", Message: "My Message of the Todo", Priority: 1},
 	}
+
+	databaseIncrementMutex sync.Mutex
+	databaseIncrement      = 5
 )
 
 func main() {
-
 	r := getGinEngine()
 
 	// Get a todo from the database
@@ -58,8 +61,32 @@ func main() {
 		c.JSON(http.StatusOK, todo)
 	})
 
-	// Create a new todo
-	r.POST("/todo/:id", func(c *gin.Context) {
+	// Creates a new todo
+	r.POST("/todo", func(c *gin.Context) {
+		defer c.Request.Body.Close()
+
+		allBody, err := ioutil.ReadAll(c.Request.Body)
+		if err != nil {
+			sendBadRequest(c, http.StatusBadRequest, "could not read body", err)
+			return
+		}
+
+		var newTodo pkg.Todo
+		if err := json.Unmarshal(allBody, &newTodo); err != nil {
+			sendBadRequest(c, http.StatusBadRequest, "could not deserialize body", err)
+			return
+		}
+
+		newTodo.Id = incrementDatabaseId()
+		todoDatabase[newTodo.Id] = newTodo
+
+		logrus.Info("Creating new todo %v+", newTodo)
+
+		c.JSON(http.StatusAccepted, newTodo)
+	})
+
+	// Updates an existing todo
+	r.PATCH("/todo/:id", func(c *gin.Context) {
 		id, ok := c.Params.Get("id")
 		if !ok || id == "" {
 			sendBadRequest(c, http.StatusBadRequest, "id parameter is required", nil)
@@ -81,16 +108,18 @@ func main() {
 
 		_, ok = todoDatabase[idParsed]
 		if !ok {
-			logrus.WithField("id", id).Warn("todo already exists. Updating")
+			logrus.WithField("id", id).Warn("todo already exists. creating new entry")
+			sendBadRequest(c, http.StatusBadRequest, "todo already exists", nil)
+			return
 		}
 
-		var newTodo pkg.Todo
-		if err := json.Unmarshal(allBody, &newTodo); err != nil {
+		var updatedTodo pkg.Todo
+		if err := json.Unmarshal(allBody, &updatedTodo); err != nil {
 			sendBadRequest(c, http.StatusBadRequest, "could not deserialize body", err)
 			return
 		}
 
-		todoDatabase[idParsed] = newTodo
+		todoDatabase[idParsed] = updatedTodo
 		c.Status(http.StatusAccepted)
 	})
 
@@ -145,4 +174,12 @@ func getGinEngine() *gin.Engine {
 	}
 
 	return r
+}
+
+// Atotmically increment the database id
+func incrementDatabaseId() int {
+	databaseIncrementMutex.Lock()
+	databaseIncrement += 1
+	databaseIncrementMutex.Unlock()
+	return databaseIncrement
 }
