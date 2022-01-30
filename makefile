@@ -14,6 +14,9 @@ dev:
 build:
 	go build -race ./...
 
+lint:
+	go vet ./...
+
 test:
 	go test ./...
 
