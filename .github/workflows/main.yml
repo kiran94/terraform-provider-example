@@ -1,5 +1,11 @@
 name: main
-on: push
+
+on:
+  push:
+    branches:
+      - master
+      - main
+  pull_request:
 
 jobs:
   run:
@@ -24,3 +30,14 @@ jobs:
 
       - name: Test
         run: make test
+
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: [run]
+    steps:
+      - name: Release
+        uses: go-semantic-release/action@v1
+        if: github.ref == 'refs/heads/main'
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}

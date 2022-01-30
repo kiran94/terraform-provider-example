@@ -1,5 +1,7 @@
 # terraform-provider-example
 
+[![main](https://github.com/kiran94/terraform-provider-example/actions/workflows/main.yml/badge.svg)](https://github.com/kiran94/terraform-provider-example/actions/workflows/main.yml) [![Go Reference](https://pkg.go.dev/badge/github.com/kiran94/terraform-provider-example.svg)](https://pkg.go.dev/github.com/kiran94/terraform-provider-example)
+
 ## Local Development
 
 At the root of this repo:
