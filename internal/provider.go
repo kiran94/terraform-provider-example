@@ -9,6 +9,11 @@ import (
 )
 
 // Creates a new Terrform Provider Schema
+// Resources in the map follow a naming convention
+// in this case having a prefix 'planner_'
+// This is important on the consumer side where terraform
+// will use that prefix to identify which provider to use
+// when the user declares resources
 func Provider() *schema.Provider {
 	return &schema.Provider{
 		Schema: map[string]*schema.Schema{
