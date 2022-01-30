@@ -1,53 +1,12 @@
 package main
 
 import (
-	"log"
-
 	"github.com/hashicorp/terraform-plugin-sdk/v2/plugin"
-	"github.com/kiran94/terraform-provider-example/client"
-	"github.com/kiran94/terraform-provider-example/show"
+	"github.com/kiran94/terraform-provider-example/internal"
 )
 
 func main() {
-	// testClient()
-
 	plugin.Serve(&plugin.ServeOpts{
-		ProviderFunc: show.Provider,
+		ProviderFunc: internal.Provider,
 	})
-}
-
-func testClient() {
-	apiClient := client.ApiClient{
-		BaseUrl: "https://localhost:5001",
-	}
-
-	show := map[string]interface{}{
-		"id":     12,
-		"name":   "Toy Story 12",
-		"rating": 100,
-	}
-
-	// Add Item
-	err := apiClient.PostItem(show)
-	if err != nil {
-		panic(err)
-	}
-
-	// Get Item
-	result, err := apiClient.GetItem(show["id"].(int))
-	if err != nil {
-		panic(err)
-	} else {
-		log.Println(result)
-	}
-
-	if len(result) == 0 {
-		log.Println("No Result found")
-	}
-
-	// Delete Item
-	err2 := apiClient.DeleteItem(show["id"].(int))
-	if err2 != nil {
-		panic(err2)
-	}
 }

@@ -1,18 +1,16 @@
 terraform {
   required_providers {
-    example = {
-      source  = "localhost/providers/example"
-      version = "~> 0.0.2"
+    planner = {
+      source  = "terraform-example.com/exampleprovider/example"
+      version = "~> 1.0.0"
     }
   }
 }
 
-provider "example" {
+provider "planner" {}
 
-}
-
-resource "example_tv_show" "item" {
-  unique_id = 50
-  name = "TMNT"
-  rating = 9
+resource "planner_todo_note" "item" {
+  title    = "my cool title"
+  message  = "my cool message"
+  priority = 8
 }
